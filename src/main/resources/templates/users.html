@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users List</title>
+</head>
+<body>
+<h2>Users List</h2>
+<table>
+    <tr>
+        <!--<th>id</th>-->
+        <th>name</th>
+        <th>role</th>
+        <th>action</th>
+    </tr>
+    <tr th:each ="user : ${userList}">
+        <!--<td th:utext="${user.getId()}">...</td>
+        <td th:utext="${user.getName()}">...</td>-->
+        <td><a th:href="@{/admin/{id}(id=${user.getId()})}"  th:text="${user.getName()}">user</a></td>
+        <td th:utext="${user.roleToString}">...</td>
+        <td><form style="display: inline-block" th:method="GET" th:action="@{/admin/{id}/edit(id=${user.getId()})}">
+            <button  type="submit">update</button>
+        </form>
+            <form style="display: inline-block" th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
+                <button  type="submit">delete</button>
+            </form>
+        </td>
+</table>
+<!--<div th:each="user : ${userList}">
+    <div style="display: flex">
+    <a th:href="@{/{id}(id=${user.getId()})}"  th:text="${user.getName()}">user</a>
+    <div>
+    <form style="display: inline-block" th:method="GET" th:action="@{/{id}/edit(id=${user.getId()})}">
+        <button  type="submit">update</button>
+    </form>
+
+    <form style="display: inline-block" th:method="DELETE" th:action="@{/{id}(id=${user.getId()})}">
+        <button  type="submit">delete</button>
+    </form>
+    </div>
+    </div>
+</div>-->
+<br/>
+<a th:href="@{/admin/new}">
+    <input type="button" value="new"/>
+</a>
+<br/>
+<a th:href="@{/logout}">
+    <input type="button" value="logout"/>
+</a>
+</body>
+</html>
