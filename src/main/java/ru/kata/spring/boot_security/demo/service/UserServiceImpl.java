@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -45,10 +47,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void update(Long id, User updatedUser) {
         User user = userRepository.getById(id);
-        user.setName(updatedUser.getName());
+        user.setFirstName(updatedUser.getFirstName());
         user.setAge(updatedUser.getAge());
         user.setEmail(updatedUser.getEmail());
-        user.setPassword(updatedUser.getPassword());
+        if (!Objects.equals(user.getPassword(), updatedUser.getPassword())) {
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        } else {
+            user.setPassword(updatedUser.getPassword());
+        }
         user.setRoles(updatedUser.getRoles());
         /*updatedUser.setId(id);*/
         userRepository.save(user);
@@ -60,53 +66,4 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*private final UserDao userDao;
-
-    @Autowired
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
-    }
-    @Transactional
-    @Override
-    public void add(User user) {
-        userDao.add(user);
-    }
-
-    @Transactional
-    @Override
-    public List<User> listUsers() {
-        return userDao.listUsers();
-    }
-
-    @Transactional
-    @Override
-    public User getUserById(Long id) {
-        return userDao.getUserById(id);
-    }
-
-    @Transactional
-    @Override
-    public void update(Long id, User user) {
-        userDao.update(id, user);
-    }
-
-    @Transactional
-    @Override
-    public void remove(Long id) {
-        userDao.remove(id);
-    }*/
 }

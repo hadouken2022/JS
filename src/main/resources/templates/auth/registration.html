@@ -2,40 +2,46 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Registration</title>
-
-<form th:method="POST" th:action="@{/auth/registration}" th:object="${user}">
-    <h2>Registration</h2>
-    <label for="name">Enter name</label>
-    <input type="text" th:field="*{name}" id="name"/>
-    <br/>
-    <label for="age">Enter age</label>
-    <input type="text" th:field="*{age}" id="age"/>
-    <br/>
-    <label for="email">Enter email</label>
-    <input type="text" th:field="*{email}" id="email"/>
-    <br/>
-    <label for="password">Enter password</label>
-    <input type="text" th:field="*{password}" id="password"/>
-    <br/>
-    <select th:field="*{roles}" multiple class="form-control form-control-sm" id="roles" name="roles" size="10"
-            required>
-        <option th:each="role: ${roles}"
-                th:value="${role.getId()}"
-                th:text="${role.role}">
-
-        </option>
-    </select>
-    <!--<input type="checkbox" id="roles" th:each="role: ${role}"
-           th:text="${role}"
-           th:value="${role.}"
-           th:field="*{roles}"/>-->
-    <hr/>
-    <input type="submit" value="Sign up"/>
-    <br/>
-</form>
 </head>
 <body>
+<form th:method="POST" th:action="@{/auth/registration}" th:object="${user}">
+<h2>Registration</h2>
+<label for="firstName">First Name</label>
+<input type="text" th:field="*{firstName}" id="firstName"/>
+<br/>
+<label for="lastName">Last Name</label>
+<input type="text" th:field="*{lastName}" id="lastName"/>
+<br/>
+<label for="age">Age</label>
+<input type="text" th:field="*{age}" id="age"/>
+<br/>
+<label for="email">Email</label>
+<input type="text" th:field="*{email}" id="email"/>
+<br/>
+<label for="password">Password</label>
+<input type="text" th:field="*{password}" id="password"/>
+<br/>
+<label for="roles">Role</label>
+    <select th:field="*{roles}" multiple class="form-control form-control-sm" id="roles" name="roles" size="3" required>
+    <option th:each="role: ${roles}"
+            th:value="${role.id}"
+            th:text="${role.role}">
 
+    </option>
+    </select>
+<!--<input type="checkbox" id="roles" th:each="role: ${role}"
+       th:text="${role}"
+       th:value="${role.}"
+       th:field="*{roles}"/>-->
+<hr/>
+<input type="submit" value="Add new user"/>
+<br/>
+</form>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

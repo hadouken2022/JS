@@ -1,8 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,6 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 
 @Controller
-//@RequestMapping("/users")
 public class UsersController {
     private final UserService userService;
     private final RoleService roleService;
@@ -24,33 +22,36 @@ public class UsersController {
     }
 
     @GetMapping("/admin")
-    public String getUsersTable(Model model) {
+    public String getUsersTable(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("userList", userService.findAll());
+        model.addAttribute("authUser", user);
+        model.addAttribute("newUser", new User());
+        model.addAttribute("roles", roleService.getListRoles());
         return "users";
     }
-    @GetMapping(value = "/admin/{id}")
+    /*@GetMapping(value = "/admin/{id}")
     public String getUserById(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.findById(id));
         return "user";
-    }
-    @GetMapping(value = "/admin/new")
-    public String newUser(/*@ModelAttribute("User") User user*/ Model model) {
+    }*/
+    /*@GetMapping(value = "/admin/new")
+    public String newUser(*//*@ModelAttribute("User") User user*//* Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("roles", roleService.getListRoles());
-        return "auth/registration";
-    }
+        return "users";
+    }*/
     @PostMapping("/admin")
     public String addUser(@ModelAttribute("user") User user) {
         userService.save(user);
         return "redirect:/admin";
     }
-    @GetMapping(value = "/admin/{id}/edit")
+    /*@GetMapping(value = "/admin/{id}/edit")
     public String editUser(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.findById(id));
         model.addAttribute("roles", roleService.getListRoles());
         return "edit";
-    }
-    @PatchMapping("/admin/{id}")
+    }*/
+    @PatchMapping("/admin/{id}/edit")
     public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
         userService.update(id, user);
         return "redirect:/admin";
@@ -60,11 +61,12 @@ public class UsersController {
         userService.delete(id);
         return "redirect:/admin";
     }
-    @GetMapping("/user/info")
+    /*@GetMapping("/authUser/info")
     public String userInfo(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        model.addAttribute("user", userService.findById(user.getId()));
-        return "user";
-    }
+        User authUser = (User) authentication.getPrincipal();
+        model.addAttribute("authUser", userService.findById(authUser.getId()));
+        return "authUser";
+    }*/
+
 }
