@@ -29,4 +29,3 @@ public class PersonDetailsService implements UserDetailsService {
         return user;
     }
 }
-

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.DTO.UserDto;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
-
 
 import java.util.List;
 import java.util.Objects;
@@ -26,8 +26,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream()
+                .map(UserDto::new)
+                .toList();
     }
 
     @Override
@@ -38,25 +40,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void save(User user) {
+    public void save(UserDto userDto) {
+        User user = new User(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
     @Override
     @Transactional
-    public void update(Long id, User updatedUser) {
-        User user = userRepository.getById(id);
-        user.setFirstName(updatedUser.getFirstName());
-        user.setAge(updatedUser.getAge());
-        user.setEmail(updatedUser.getEmail());
-        if (!Objects.equals(user.getPassword(), updatedUser.getPassword())) {
-            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+    public void update(User userUpdate) {
+        User user = userRepository.getById(userUpdate.getId());
+        user.setFirstName(userUpdate.getFirstName());
+        user.setLastName(userUpdate.getLastName());
+        user.setAge(userUpdate.getAge());
+        user.setEmail(userUpdate.getEmail());
+        user.setRoles(userUpdate.getRoles());
+        if (!Objects.equals(user.getPassword(), userUpdate.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
         } else {
-            user.setPassword(updatedUser.getPassword());
+            user.setPassword(userUpdate.getPassword());
         }
-        user.setRoles(updatedUser.getRoles());
-        /*updatedUser.setId(id);*/
         userRepository.save(user);
     }
 
@@ -64,6 +67,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        Optional<User> foundUser = userRepository.findByEmail(email);
+        return foundUser.orElse(null);
     }
 
 }
